@@ -1,4 +1,3 @@
-import imghdr
 import os
 import time
 import datetime
