@@ -1,4 +1,11 @@
-from logging.config import listen
+'''
+https://github.com/Sugobet/EVE_Get_MaNei
+
+Sugobet
+QQ: 321355478
+qq群: 924372864
+'''
+
 import os
 import time
 import datetime
@@ -16,12 +23,11 @@ M = {
     '第三槽位': [814, 438],
     '第四槽位': [924, 495],
     '第五槽位': [868, 495],
-    '第六槽位': [914, 495],
-    '第七槽位': [924, 495],
+    '第六槽位': [813, 495],
+    '第七槽位': [762, 495],
 }
 high_cao = {'kuanggong1': [M['第一槽位']]}
 low_cao = {'kuanggong1': [M['第二槽位'], M['第三槽位'], M['第四槽位'], M['第五槽位'], M['第六槽位'], M['第七槽位']]}
-ic = ['937 62', '937 111'][0]
 
 
 def IF_Img_I(src, mp):
@@ -151,9 +157,9 @@ class Listening:
         for key in res:
             if '拦截' in key['text']:
                 tim = str(datetime.datetime.now()).replace(' ', '---')
-                print(f'疑似蓝加拦截----------------{tim}')
-                print(f'疑似蓝加拦截----------------{tim}')
-                print(f'疑似蓝加拦截----------------{tim}')
+                print(self.device_name, f'疑似蓝加拦截----------------{tim}')
+                print(self.device_name, f'疑似蓝加拦截----------------{tim}')
+                print(self.device_name, f'疑似蓝加拦截----------------{tim}')
                 img.save(f'{path}/{self.device_name}_FUCK_BLUE_SHIP_{tim}.png')
                 return True
         return False
@@ -376,10 +382,13 @@ class Command:
         '''
         : 激活高槽
         '''
+        os.system(self.adb + f'shell input tap 477 531')
+        time.sleep(1)
         for lis in high_cao[self.device_name]:
             os.system(self.adb + f'shell input tap {lis[0]} {lis[1]}')
             time.sleep(0.5)
         if type == '逆戟鲸级':
+            time.sleep(2)
             for lis in high_cao[self.device_name]:
                 os.system(self.adb + f'shell input tap {lis[0]} {lis[1]}')
                 time.sleep(0.5)
@@ -419,6 +428,7 @@ class Command:
 
 
 def Start(device_name, device_address, cnocr):
+    des = ''
     is_waK = False
     listening = Listening(device_name, device_address, cnocr)
     command = Command(device_name, device_address, cnocr)
@@ -428,7 +438,6 @@ def Start(device_name, device_address, cnocr):
     # 在矿区：检测蓝加拦截、接近矿石、激活高槽、总览切换至 舰船 列表
     # 在太空: 切换总览至 挖矿 、寻找矿区进入矿区、检测舰船状态、跃迁细节
     while True:
-        des = ''
         listening.screenc()
         img = Image.open(f'{path}/{device_name}.png')
         dtm = datetime.datetime.now()
@@ -436,18 +445,18 @@ def Start(device_name, device_address, cnocr):
         # 检测本地红白
         if state:
             if listening.IsAtSation(img):
-                print('检测到本地有人---------------', dtm)
+                print(device_name, '检测到本地有人---------------', dtm)
                 continue
             command.GoHome()
             command.ActLowCao()
-            print('检测到本地有人---------------', dtm)
+            print(device_name, '检测到本地有人---------------', dtm)
             while True:
                 # 检测舰船状态
                 listening.screenc()
                 img = Image.open(f'{path}/{device_name}.png')
-                _, _, des = listening.GetShipState(img)
-                if des == '即将到达':
-                    print(des + '空间站', dtm)
+                _, _, des22 = listening.GetShipState(img)
+                if des22 == '即将到达':
+                    print(device_name, des22 + '空间站', dtm)
                     break
                 time.sleep(1)
             continue
@@ -460,7 +469,7 @@ def Start(device_name, device_address, cnocr):
             print(des1)
             des = des1
             if not s:
-                print(f'{des}  该船型暂不支持, {device_name} 暂停运行', dtm)
+                print(device_name, f'{des}  该船型暂不支持, {device_name} 暂停运行', dtm)
                 return
             
             command.OutHome()
@@ -472,7 +481,7 @@ def Start(device_name, device_address, cnocr):
                     break
                 time.sleep(1)
             # 已出站
-            print('已出站')
+            print(device_name, '已出站')
             # 设置自动导航
             time.sleep(3)
 
@@ -481,7 +490,7 @@ def Start(device_name, device_address, cnocr):
 
         # 仓库满仓
         if listening.IsMax(img):
-            print('仓库满仓')
+            print(device_name, '仓库满仓')
             command.GoHome()
             command.ActLowCao()
 
@@ -492,7 +501,7 @@ def Start(device_name, device_address, cnocr):
                 if listening.IsAtSation(img):
                     time.sleep(3)
                     # 放置矿石
-                    print('放置矿石')
+                    print(device_name, '放置矿石')
                     command.PutK()
                     break
                 time.sleep(1)
@@ -508,8 +517,8 @@ def Start(device_name, device_address, cnocr):
                 listening.screenc()
                 img = Image.open(f'{path}/{device_name}.png')
                 if listening.IsAtSation(img):
-                    print('安全逃离----------', dtm)
-                    print('等待三分钟-----------', dtm)
+                    print(device_name, '安全逃离----------', dtm)
+                    print(device_name, '等待三分钟-----------', dtm)
                     time.sleep(90)
                     break
                 time.sleep(1)
@@ -520,15 +529,16 @@ def Start(device_name, device_address, cnocr):
             # 整合     判断矿区消失
             if is_waK and listening.IsHaveKArea(img):
                 continue
+            print(device_name, '矿区消失')
             is_waK = False
             # 切换总览-挖矿
             command.ToKShow()
             # 寻找、进入矿区
-            print('寻找、进入矿区')
+            print(device_name, '寻找、进入矿区')
             listening.screenc()
             img = Image.open(f'{path}/{device_name}.png')
-            _, _, des = command.GoToKAreaUp(img)
-            print(des)
+            _, _, des33 = command.GoToKAreaUp(img)
+            print(des33)
 
             time.sleep(1)
             listening.screenc()
@@ -539,21 +549,21 @@ def Start(device_name, device_address, cnocr):
             while True:
                 # 检测舰船状态
                 listening.screenc()
-                _, index, des = listening.GetShipState(Image.open(f'{path}/{device_name}.png'))
-                print('检测舰船状态', des)
+                _, index, des2 = listening.GetShipState(Image.open(f'{path}/{device_name}.png'))
+                print(device_name, '检测舰船状态', des2)
                 if index == 4:
-                    print('已进入矿区')
+                    print(device_name, '已进入矿区')
                     break
                 time.sleep(1)
             if not is_waK:
                 # 接近矿石
-                print('接近矿石')
+                print(device_name, '接近矿石')
                 command.RunK()
                 # 激活高槽
-                print('激活高槽')
+                print(device_name, '激活高槽')
                 command.ActHighCao(des)
                 # 切换总览-舰船
-                print('切换总览-舰船')
+                print(device_name, '切换总览-舰船')
                 command.ToShipShow()
                 is_waK = True
             continue
