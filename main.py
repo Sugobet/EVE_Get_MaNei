@@ -463,6 +463,7 @@ def Start(device_name, device_address, cnocr):
 
         # 在空间站内
         if listening.IsAtSation(img):
+            is_waK = False
             listening.screenc()
             img = Image.open(f'{path}/{device_name}.png')
             s, _, des1 = command.GetShipType()
