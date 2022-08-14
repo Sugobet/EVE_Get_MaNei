@@ -455,7 +455,7 @@ def Start(device_name, device_address, cnocr):
                 listening.screenc()
                 img = Image.open(f'{path}/{device_name}.png')
                 _, _, des22 = listening.GetShipState(img)
-                if des22 == '即将到达':
+                if des22 == '舰船正在停止':
                     print(device_name, des22 + '空间站', dtm)
                     break
                 time.sleep(1)
