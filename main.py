@@ -251,12 +251,12 @@ class Command:
         text = res[0]['text']
         if '回旋' in text:
             return True, 1, '回旋者级'
-        if '猎获' in text:
+        if '获' in text:
             return True, 2, '猎获级'
-        if '妄想' in text:
-            return True, 3, '妄想级'
         if '妄想级二' in text:
             return True, 4, '妄想级二型'
+        if '妄想' in text:
+            return True, 3, '妄想级'
         if '逆' in text:
             return True, 5, '逆戟鲸级'
         
@@ -538,7 +538,7 @@ def Start(device_name, device_address, cnocr):
             print(device_name, '寻找、进入矿区')
             listening.screenc()
             img = Image.open(f'{path}/{device_name}.png')
-            _, _, des33 = command.GoToKAreaUp(img)
+            _, k_index, des33 = command.GoToKAreaUp(img)
             print(des33)
 
             time.sleep(1)
@@ -563,6 +563,9 @@ def Start(device_name, device_address, cnocr):
                 # 激活高槽
                 print(device_name, '激活高槽')
                 command.ActHighCao(des)
+                if k_index == 1 or k_index == 2:
+                    print('正在接近矿石')
+                    time.sleep(20)
                 # 切换总览-舰船
                 print(device_name, '切换总览-舰船')
                 command.ToShipShow()

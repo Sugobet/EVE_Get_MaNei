@@ -10,6 +10,11 @@ pip install torchvision
 pip install Polygon3
 pip install cnocr
 
+pip install Polygon3-3.0.9.1-cp38-cp38-win_amd64.whl
+pip install Polygon3-3.0.9.1-cp39-cp39-win_amd64.whl
+pip install Polygon3-3.0.9.1-cp310-cp310-win_amd64.whl
+pip install Polygon3-3.0.9.1-cp37-cp37-win_amd64.whl
+
 
  pause
  exit
