@@ -454,9 +454,8 @@ def Start(device_name, device_address, cnocr):
                 # 检测舰船状态
                 listening.screenc()
                 img = Image.open(f'{path}/{device_name}.png')
-                _, _, des22 = listening.GetShipState(img)
-                if des22 == '舰船正在停止':
-                    print(device_name, des22 + '空间站', dtm)
+                if listening.IsAtSation(img):
+                    print(device_name, '进入空间站', dtm)
                     break
                 time.sleep(1)
             continue
