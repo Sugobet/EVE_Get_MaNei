@@ -320,7 +320,7 @@ class Command:
         css = []
         sts = []
         std = []
-        for key in res[1::]:
+        for key in res:
             if '集群' in key['text']:
                 x = int(key['position'][0][0])
                 y = int(key['position'][0][1])
@@ -338,12 +338,21 @@ class Command:
                 continue
         
         if css != []:
+            if len(css) >= 2:
+                os.system(self.adb + f'shell input tap {str(css[1][0])} {str(css[1][1])}')
+                return True, 1, '小行星集群'
             os.system(self.adb + f'shell input tap {str(css[0][0])} {str(css[0][1])}')
             return True, 1, '小行星集群'
         if sts != []:
+            if len(sts) >= 2:
+                os.system(self.adb + f'shell input tap {str(sts[1][0])} {str(sts[1][1])}')
+                return True, 2, '小行星群'
             os.system(self.adb + f'shell input tap {str(sts[0][0])} {str(sts[0][1])}')
             return True, 2, '小行星群'
         if std != []:
+            if len(sts) >= 2:
+                os.system(self.adb + f'shell input tap {str(std[1][0])} {str(std[1][1])}')
+                return True, 3, '小行星带'
             os.system(self.adb + f'shell input tap {str(std[0][0])} {str(std[0][1])}')
             return True, 3, '小行星带'
         
