@@ -320,7 +320,7 @@ class Command:
         css = []
         sts = []
         std = []
-        for key in res:
+        for key in res[1::]:
             if '集群' in key['text']:
                 x = int(key['position'][0][0])
                 y = int(key['position'][0][1])
