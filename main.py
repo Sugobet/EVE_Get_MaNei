@@ -312,7 +312,7 @@ class Command:
         os.system(self.adb + 'shell input tap 188 189')
 
 
-    def GoToKAreaUp(self, img: Image.Image):
+    def GoToKAreaUp(self, img: Image.Image, state):
         res = self.ocr.ocr(img)
         if res == []:
             return False, -1, ''
@@ -338,23 +338,26 @@ class Command:
                 continue
         
         if css != []:
-            if len(css) >= 2:
+            if len(css) >= 2 and state:
                 os.system(self.adb + f'shell input tap {str(css[1][0])} {str(css[1][1])}')
                 return True, 1, '小行星集群'
-            os.system(self.adb + f'shell input tap {str(css[0][0])} {str(css[0][1])}')
-            return True, 1, '小行星集群'
+            elif not state:
+                os.system(self.adb + f'shell input tap {str(css[0][0])} {str(css[0][1])}')
+                return True, 1, '小行星集群'
         if sts != []:
-            if len(sts) >= 2:
+            if len(sts) >= 2 and state:
                 os.system(self.adb + f'shell input tap {str(sts[1][0])} {str(sts[1][1])}')
                 return True, 2, '小行星群'
-            os.system(self.adb + f'shell input tap {str(sts[0][0])} {str(sts[0][1])}')
-            return True, 2, '小行星群'
+            elif not state:
+                os.system(self.adb + f'shell input tap {str(sts[0][0])} {str(sts[0][1])}')
+                return True, 2, '小行星群'
         if std != []:
-            if len(sts) >= 2:
+            if len(sts) >= 2 and state:
                 os.system(self.adb + f'shell input tap {str(std[1][0])} {str(std[1][1])}')
                 return True, 3, '小行星带'
-            os.system(self.adb + f'shell input tap {str(std[0][0])} {str(std[0][1])}')
-            return True, 3, '小行星带'
+            elif not state:
+                os.system(self.adb + f'shell input tap {str(std[0][0])} {str(std[0][1])}')
+                return True, 3, '小行星带'
         
         return False, -1, ''
     
@@ -539,14 +542,14 @@ def Start(device_name, device_address, cnocr):
             if is_waK and listening.IsHaveKArea(img):
                 continue
             print(device_name, '矿区消失')
-            is_waK = False
             # 切换总览-挖矿
             command.ToKShow()
             # 寻找、进入矿区
             print(device_name, '寻找、进入矿区')
             listening.screenc()
             img = Image.open(f'{path}/{device_name}.png')
-            _, k_index, des33 = command.GoToKAreaUp(img)
+            _, k_index, des33 = command.GoToKAreaUp(img, is_waK)
+            is_waK = False
             print(des33)
 
             time.sleep(1)
