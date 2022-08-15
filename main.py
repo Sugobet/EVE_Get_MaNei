@@ -383,7 +383,7 @@ class Command:
         '''
         os.system(self.adb + f'shell input tap {740 + random.randint(2, 96)} 20')
         time.sleep(0.5)
-        os.system(self.adb + f'shell input tap {740 + random.randint(2, 148)} {482 + random.randint(2, 27)}')
+        os.system(self.adb + f'shell input tap {740 + random.randint(2, 148)} {448 + random.randint(2, 27)}')
 
         time.sleep(0.5)
         os.system(self.adb + f'shell input tap {767 + random.randint(2, 126)} {50 + random.randint(2, 33)}')
@@ -411,20 +411,18 @@ class Command:
         '''
         : 总览切换至 舰船 标签
         '''
-        os.system(self.adb + 'shell input tap 799 20')
+        os.system(self.adb + f'shell input tap {740 + random.randint(2, 96)} 20')
         time.sleep(0.5)
-        os.system(self.adb + 'shell input tap 808 146')
+        os.system(self.adb + f'shell input tap {742 + random.randint(2, 141)} {129 + random.randint(2, 35)}')
 
 
     def ToKShow(self):
         '''
         : 总览切换至 挖矿 标签
         '''
-        os.system(self.adb + 'shell input tap 799 20')
+        os.system(self.adb + f'shell input tap {740 + random.randint(2, 96)} 20')
         time.sleep(0.2)
-        os.system(self.adb + 'shell input tap 817 414')
-        time.sleep(0.2)
-        os.system(self.adb + 'shell input tap 939 62')
+        os.system(self.adb + f'shell input tap {746 + random.randint(2, 139)} {400 + random.randint(2, 30)}')
 
 
     def GoHome(self):
