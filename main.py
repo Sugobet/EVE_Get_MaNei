@@ -13,6 +13,7 @@ from PIL import Image
 import cv2
 from cnocr import CnOcr
 import threading
+import random
 
 
 path = 'C:/Users/sugob/Desktop/EVE_Get_MaNei'
@@ -232,9 +233,9 @@ class Command:
 
 
     def GetShipType(self):
-        os.system(self.adb + 'shell input tap 46 21')
+        os.system(self.adb + f'shell input tap {7 + random.randint(2, 40)} {18 + random.randint(2, 25)}')
         time.sleep(0.5)
-        os.system(self.adb + 'shell input tap 141 164')
+        os.system(self.adb + f'shell input tap {110 + random.randint(2, 50)} {135 + random.randint(2, 50)}')
         time.sleep(4)
 
         self.screenc()
@@ -249,13 +250,13 @@ class Command:
         if res == []:
             return False, -1, ''
         text = res[0]['text']
-        if '回旋' in text:
+        if '回' in text:
             return True, 1, '回旋者级'
         if '获' in text:
             return True, 2, '猎获级'
-        if '妄想级二' in text:
+        if '想级二' in text:
             return True, 4, '妄想级二型'
-        if '妄想' in text:
+        if '想' in text:
             return True, 3, '妄想级'
         if '逆' in text:
             return True, 5, '逆戟鲸级'
@@ -264,13 +265,13 @@ class Command:
     
 
     def OutHome(self):
-        os.system(self.adb + 'shell input tap 896 176')
+        os.system(self.adb + f'shell input tap {869 + random.randint(2, 65)} {165 + random.randint(2, 20)}')
 
 
     def PutK(self):
         os.system(self.adb + 'shell input tap 20 89')
         time.sleep(4)
-        os.system(self.adb + 'shell input tap 86 77')
+        os.system(self.adb + f'shell input tap {16 + random.randint(2, 170)} {70 + random.randint(2, 20)}')
 
         self.screenc()
         img = Image.open(f'{path}/{self.device_name}.png')
@@ -286,30 +287,30 @@ class Command:
                 break
 
         time.sleep(0.3)
-        os.system(self.adb + 'shell input tap 734 487')
+        os.system(self.adb + f'shell input tap {700 + random.randint(2, 60)} {460 + random.randint(2, 50)}')
         time.sleep(0.3)
-        os.system(self.adb + 'shell input tap 105 112')
+        os.system(self.adb + f'shell input tap {30 + random.randint(2, 150)} {90 + random.randint(2, 35)}')
         time.sleep(0.3)
-        os.system(self.adb + 'shell input tap 427 120')
+        os.system(self.adb + f'shell input tap {315 + random.randint(2, 185)} {100 + random.randint(2, 42)}')
         time.sleep(3)
-        os.system(self.adb + 'shell input tap 924 31')
+        os.system(self.adb + 'shell input tap 924 30')
         return True
 
 
     def SetHomePoint(self):
         os.system(self.adb + 'shell input tap 927 302')
         time.sleep(0.1)
-        os.system(self.adb + 'shell input tap 21 146')
+        os.system(self.adb + f'shell input tap {20 + random.randint(2, 5)} 146')
         time.sleep(0.3)
-        os.system(self.adb + 'shell input tap 186 504')
+        os.system(self.adb + f'shell input tap {168 + random.randint(2, 35)} {490 + random.randint(2, 26)}')
         time.sleep(0.3)
-        os.system(self.adb + 'shell input tap 302 258')
+        os.system(self.adb + f'shell input tap {225 + random.randint(2, 148)} {237 + random.randint(2, 25)}')
         time.sleep(0.3)
-        os.system(self.adb + 'shell input tap 79 228')
+        os.system(self.adb + f'shell input tap {32 + random.randint(2, 96)} {218 + random.randint(2, 20)}')
         time.sleep(0.3)
-        os.system(self.adb + 'shell input tap 301 199')
+        os.system(self.adb + f'shell input tap {230 + random.randint(2, 138)} {180 + random.randint(2, 35)}')
         time.sleep(0.3)
-        os.system(self.adb + 'shell input tap 188 189')
+        os.system(self.adb + f'shell input tap {173 + random.randint(2, 28)} 189')
 
 
     def GoToKAreaUp(self, img: Image.Image, state):
@@ -380,14 +381,14 @@ class Command:
         '''
         : 接近矿石
         '''
-        os.system(self.adb + 'shell input tap 799 20')
+        os.system(self.adb + f'shell input tap {740 + random.randint(2, 96)} 20')
         time.sleep(0.5)
-        os.system(self.adb + 'shell input tap 808 472')
+        os.system(self.adb + f'shell input tap {747 + random.randint(2, 143)} {400 + random.randint(2, 30)}')
 
         time.sleep(0.5)
-        os.system(self.adb + 'shell input tap 824 65')
+        os.system(self.adb + f'shell input tap {767 + random.randint(2, 126)} {50 + random.randint(2, 33)}')
         time.sleep(0.5)
-        os.system(self.adb + 'shell input tap 630 133')
+        os.system(self.adb + f'shell input tap {555 + random.randint(2, 145)} {110 + random.randint(2, 38)}')
 
 
     def ActHighCao(self, type: str):
@@ -427,7 +428,7 @@ class Command:
 
 
     def GoHome(self):
-        os.system(self.adb + 'shell input tap 21 147')
+        os.system(self.adb + f'shell input tap {20 + random.randint(2, 5)} 146')
 
 
     def ActLowCao(self):
