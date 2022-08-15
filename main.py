@@ -352,7 +352,7 @@ class Command:
                 os.system(self.adb + f'shell input tap {str(sts[0][0])} {str(sts[0][1])}')
                 return True, 2, '小行星群'
         if std != []:
-            if len(sts) >= 2 and state:
+            if len(std) >= 2 and state:
                 os.system(self.adb + f'shell input tap {str(std[1][0])} {str(std[1][1])}')
                 return True, 3, '小行星带'
             elif not state:
