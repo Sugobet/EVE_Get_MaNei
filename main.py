@@ -383,7 +383,7 @@ class Command:
         '''
         os.system(self.adb + f'shell input tap {740 + random.randint(2, 96)} 20')
         time.sleep(0.5)
-        os.system(self.adb + f'shell input tap {747 + random.randint(2, 143)} {400 + random.randint(2, 30)}')
+        os.system(self.adb + f'shell input tap {740 + random.randint(2, 148)} {482 + random.randint(2, 27)}')
 
         time.sleep(0.5)
         os.system(self.adb + f'shell input tap {767 + random.randint(2, 126)} {50 + random.randint(2, 33)}')
