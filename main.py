@@ -30,6 +30,8 @@ M = {
 high_cao = {'kuanggong1': [M['第一槽位']]}
 low_cao = {'kuanggong1': [M['第二槽位'], M['第三槽位'], M['第四槽位'], M['第五槽位'], M['第六槽位'], M['第七槽位']]}
 
+timer = 3        # 点击屏幕的时间间隔
+
 
 def IF_Img_I(src, mp):
     # w, h = mp.shape[::2]
@@ -234,7 +236,7 @@ class Command:
 
     def GetShipType(self):
         os.system(self.adb + f'shell input tap {7 + random.randint(2, 40)} {18 + random.randint(2, 25)}')
-        time.sleep(0.5)
+        time.sleep(timer)
         os.system(self.adb + f'shell input tap {110 + random.randint(2, 50)} {135 + random.randint(2, 50)}')
         time.sleep(4)
 
@@ -242,6 +244,7 @@ class Command:
         img = Image.open(f'{path}/{self.device_name}.png')
 
         state = self.crop(4, 164, 186, 198, img)
+        img.close()
         if not state:
             return False, -1, ''
         os.system(self.adb + 'shell input tap 924 31')
@@ -277,6 +280,7 @@ class Command:
         img = Image.open(f'{path}/{self.device_name}.png')
 
         res = self.ocr.ocr(img)
+        img.close()
         if res == []:
             return False
         for key in res:
@@ -286,11 +290,11 @@ class Command:
                 os.system(self.adb + f'shell input tap {str(x)} {str(y)}')
                 break
 
-        time.sleep(0.3)
+        time.sleep(timer)
         os.system(self.adb + f'shell input tap {700 + random.randint(2, 60)} {460 + random.randint(2, 50)}')
-        time.sleep(0.3)
+        time.sleep(timer)
         os.system(self.adb + f'shell input tap {30 + random.randint(2, 150)} {90 + random.randint(2, 35)}')
-        time.sleep(0.3)
+        time.sleep(timer)
         os.system(self.adb + f'shell input tap {315 + random.randint(2, 185)} {100 + random.randint(2, 42)}')
         time.sleep(3)
         os.system(self.adb + 'shell input tap 924 30')
@@ -299,17 +303,17 @@ class Command:
 
     def SetHomePoint(self):
         os.system(self.adb + 'shell input tap 927 302')
-        time.sleep(0.1)
+        time.sleep(timer)
         os.system(self.adb + f'shell input tap {20 + random.randint(2, 5)} 146')
-        time.sleep(0.3)
+        time.sleep(timer)
         os.system(self.adb + f'shell input tap {168 + random.randint(2, 35)} {490 + random.randint(2, 26)}')
-        time.sleep(0.3)
+        time.sleep(timer)
         os.system(self.adb + f'shell input tap {225 + random.randint(2, 148)} {237 + random.randint(2, 25)}')
-        time.sleep(0.3)
+        time.sleep(timer)
         os.system(self.adb + f'shell input tap {32 + random.randint(2, 96)} {218 + random.randint(2, 20)}')
-        time.sleep(0.3)
+        time.sleep(timer)
         os.system(self.adb + f'shell input tap {230 + random.randint(2, 138)} {180 + random.randint(2, 35)}')
-        time.sleep(0.3)
+        time.sleep(timer)
         os.system(self.adb + f'shell input tap {173 + random.randint(2, 28)} 189')
 
 
@@ -382,12 +386,12 @@ class Command:
         : 接近矿石
         '''
         os.system(self.adb + f'shell input tap {740 + random.randint(2, 96)} 20')
-        time.sleep(0.5)
+        time.sleep(timer)
         os.system(self.adb + f'shell input tap {740 + random.randint(2, 148)} {448 + random.randint(2, 27)}')
 
-        time.sleep(0.5)
+        time.sleep(timer)
         os.system(self.adb + f'shell input tap {767 + random.randint(2, 126)} {50 + random.randint(2, 33)}')
-        time.sleep(0.5)
+        time.sleep(timer)
         os.system(self.adb + f'shell input tap {555 + random.randint(2, 145)} {110 + random.randint(2, 38)}')
 
 
@@ -412,7 +416,7 @@ class Command:
         : 总览切换至 舰船 标签
         '''
         os.system(self.adb + f'shell input tap {740 + random.randint(2, 96)} 20')
-        time.sleep(0.5)
+        time.sleep(timer)
         os.system(self.adb + f'shell input tap {742 + random.randint(2, 141)} {129 + random.randint(2, 35)}')
 
 
@@ -421,7 +425,7 @@ class Command:
         : 总览切换至 挖矿 标签
         '''
         os.system(self.adb + f'shell input tap {740 + random.randint(2, 96)} 20')
-        time.sleep(0.2)
+        time.sleep(timer)
         os.system(self.adb + f'shell input tap {746 + random.randint(2, 139)} {400 + random.randint(2, 30)}')
 
 
@@ -435,7 +439,7 @@ class Command:
         '''
         for lis in low_cao[self.device_name]:
             os.system(self.adb + f'shell input tap {lis[0]} {lis[1]}')
-            time.sleep(0.01)
+            time.sleep(0.5)
 
 
 def Start(device_name, device_address, cnocr):
@@ -457,6 +461,7 @@ def Start(device_name, device_address, cnocr):
         if state:
             if listening.IsAtSation(img):
                 print(device_name, '检测到本地有人---------------', dtm)
+                img.close()
                 continue
             command.GoHome()
             command.ActLowCao()
@@ -466,9 +471,12 @@ def Start(device_name, device_address, cnocr):
                 listening.screenc()
                 img = Image.open(f'{path}/{device_name}.png')
                 if listening.IsAtSation(img):
+                    img.close()
                     print(device_name, '进入空间站', dtm)
                     break
+                img.close()
                 time.sleep(1)
+            img.close()
             continue
 
         # 在空间站内
@@ -480,6 +488,7 @@ def Start(device_name, device_address, cnocr):
             print(des1)
             des = des1
             if not s:
+                img.close()
                 print(device_name, f'{des}  该船型暂不支持, {device_name} 暂停运行', dtm)
                 return
             
@@ -489,7 +498,9 @@ def Start(device_name, device_address, cnocr):
                 listening.screenc()
                 img = Image.open(f'{path}/{device_name}.png')
                 if listening.IsInSpace(img):
+                    img.close()
                     break
+                img.close()
                 time.sleep(1)
             # 已出站
             print(device_name, '已出站')
@@ -497,6 +508,7 @@ def Start(device_name, device_address, cnocr):
             time.sleep(3)
 
             command.SetHomePoint()
+            img.close()
             continue
 
         # 仓库满仓
@@ -510,12 +522,15 @@ def Start(device_name, device_address, cnocr):
                 listening.screenc()
                 img = Image.open(f'{path}/{device_name}.png')
                 if listening.IsAtSation(img):
+                    img.close()
                     time.sleep(3)
                     # 放置矿石
                     print(device_name, '放置矿石')
                     command.PutK()
                     break
+                img.close()
                 time.sleep(1)
+            img.close()
             continue
 
         # 检测蓝加拦截舰船
@@ -528,17 +543,20 @@ def Start(device_name, device_address, cnocr):
                 listening.screenc()
                 img = Image.open(f'{path}/{device_name}.png')
                 if listening.IsAtSation(img):
+                    img.close()
                     print(device_name, '安全逃离----------', dtm)
                     print(device_name, '等待三分钟-----------', dtm)
                     time.sleep(90)
                     break
                 time.sleep(1)
+            img.close()
             continue
 
         # 在太空 & 挖矿  整合
         if listening.IsInSpace(img):
             # 整合     判断矿区消失
             if is_waK and listening.IsHaveKArea(img):
+                img.close()
                 continue
             print(device_name, '矿区消失')
             # 切换总览-挖矿
@@ -548,6 +566,7 @@ def Start(device_name, device_address, cnocr):
             listening.screenc()
             img = Image.open(f'{path}/{device_name}.png')
             _, k_index, des33 = command.GoToKAreaUp(img, is_waK)
+            img.close()
             is_waK = False
             print(des33)
 
@@ -555,12 +574,15 @@ def Start(device_name, device_address, cnocr):
             listening.screenc()
             img = Image.open(f'{path}/{device_name}.png')
             st = command.GoToKAreaDown(img)
+            img.close()
             if not st:
                 continue
             while True:
                 # 检测舰船状态
                 listening.screenc()
-                _, index, des2 = listening.GetShipState(Image.open(f'{path}/{device_name}.png'))
+                img = Image.open(f'{path}/{device_name}.png')
+                _, index, des2 = listening.GetShipState(img)
+                img.close()
                 print(device_name, '检测舰船状态', des2)
                 if index == 4:
                     print(device_name, '已进入矿区')
@@ -580,6 +602,7 @@ def Start(device_name, device_address, cnocr):
                 print(device_name, '切换总览-舰船')
                 command.ToShipShow()
                 is_waK = True
+            img.close()
             continue
 
 
