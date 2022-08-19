@@ -16,7 +16,7 @@ import threading
 import random
 
 
-path = 'C:/Users/sugob/Desktop/EVE_Get_MaNei'
+path = 'C:/Users/sugob/Desktop/EVE_Get_MaNei'       # 脚本文件夹绝对路径  （反斜杠改斜杠）
 devices = {'kuanggong1': '127.0.0.1:62001'}      # cmd输入adb devices查看模拟器地址
 M = {
     '第一槽位': [920, 438],
@@ -27,10 +27,18 @@ M = {
     '第六槽位': [813, 495],
     '第七槽位': [762, 495],
 }
-high_cao = {'kuanggong1': [M['第一槽位']]}
-low_cao = {'kuanggong1': [M['第二槽位'], M['第三槽位'], M['第四槽位'], M['第五槽位'], M['第六槽位'], M['第七槽位']]}
+high_cao = {
+    'kuanggong1': [M['第一槽位']],
+}      # 高槽
 
-timer = 3        # 点击屏幕的时间间隔
+# 低槽
+low_cao = {
+    'kuanggong1': [M['第二槽位'], M['第三槽位'], M['第四槽位'], M['第五槽位'], M['第六槽位'], M['第七槽位']],
+}
+
+timer = 3        # 点击屏幕的时间间隔    单位：秒
+
+conVal = 1.875      # 程序执行一遍的间隔时间    单位: 秒
 
 
 def IF_Img_I(src, mp):
@@ -445,6 +453,8 @@ class Command:
 def Start(device_name, device_address, cnocr):
     des = ''
     is_waK = False
+    is_station = True
+    if_Max = 0
     listening = Listening(device_name, device_address, cnocr)
     command = Command(device_name, device_address, cnocr)
     # 检测本地红白、跑路
@@ -453,6 +463,7 @@ def Start(device_name, device_address, cnocr):
     # 在矿区：检测蓝加拦截、接近矿石、激活高槽、总览切换至 舰船 列表
     # 在太空: 切换总览至 挖矿 、寻找矿区进入矿区、检测舰船状态、跃迁细节
     while True:
+        time.sleep(conVal)
         listening.screenc()
         img = Image.open(f'{path}/{device_name}.png')
         dtm = datetime.datetime.now()
@@ -480,7 +491,7 @@ def Start(device_name, device_address, cnocr):
             continue
 
         # 在空间站内
-        if listening.IsAtSation(img):
+        if is_station:
             is_waK = False
             listening.screenc()
             img = Image.open(f'{path}/{device_name}.png')
@@ -498,6 +509,7 @@ def Start(device_name, device_address, cnocr):
                 listening.screenc()
                 img = Image.open(f'{path}/{device_name}.png')
                 if listening.IsInSpace(img):
+                    is_station = False
                     img.close()
                     break
                 img.close()
@@ -512,7 +524,10 @@ def Start(device_name, device_address, cnocr):
             continue
 
         # 仓库满仓
-        if listening.IsMax(img):
+        if if_Max >= 3:
+            if_Max = 0
+            if not listening.IsMax(img):
+                continue
             print(device_name, '仓库满仓')
             command.GoHome()
             command.ActLowCao()
@@ -522,6 +537,7 @@ def Start(device_name, device_address, cnocr):
                 listening.screenc()
                 img = Image.open(f'{path}/{device_name}.png')
                 if listening.IsAtSation(img):
+                    is_station = True
                     img.close()
                     time.sleep(3)
                     # 放置矿石
@@ -532,6 +548,7 @@ def Start(device_name, device_address, cnocr):
                 time.sleep(1)
             img.close()
             continue
+        if_Max += 1
 
         # 检测蓝加拦截舰船
         if listening.FindBlueFuckShip(img):
@@ -543,6 +560,7 @@ def Start(device_name, device_address, cnocr):
                 listening.screenc()
                 img = Image.open(f'{path}/{device_name}.png')
                 if listening.IsAtSation(img):
+                    is_station = True
                     img.close()
                     print(device_name, '安全逃离----------', dtm)
                     print(device_name, '等待三分钟-----------', dtm)
