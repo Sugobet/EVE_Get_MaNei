@@ -190,7 +190,7 @@ class Listening:
         '''
         : 监测本地红白
         '''
-        i1 = self.crop(82, 419, 116, 438, img)
+        i1 = self.crop(82, 430, 123, 451, img)
         res = self.ocr.ocr(i1)
         if res == []:
             return False
@@ -200,7 +200,7 @@ class Listening:
         if len(num) == 1 and num != '0':
             return True
         
-        i1 = self.crop(144, 418, 177, 438, img)
+        i1 = self.crop(144, 430, 180, 452, img)
         res = self.ocr.ocr(i1)
         if res == []:
             return False
