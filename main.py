@@ -563,6 +563,7 @@ def Start(device_name, device_address, cnocr):
             command.ToKShow()
             # 寻找、进入矿区
             print(device_name, '寻找、进入矿区')
+            time.sleep(2)
             listening.screenc()
             img = Image.open(f'{path}/{device_name}.png')
             _, k_index, des33 = command.GoToKAreaUp(img, is_waK)
