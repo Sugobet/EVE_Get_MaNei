@@ -482,6 +482,7 @@ def Start(device_name, device_address, cnocr):
                 listening.screenc()
                 img = Image.open(f'{path}/{device_name}.png')
                 if listening.IsAtSation(img):
+                    is_station = True
                     img.close()
                     print(device_name, '进入空间站', dtm)
                     break
