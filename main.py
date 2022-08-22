@@ -41,17 +41,12 @@ timer = 3        # 点击屏幕的时间间隔    单位：秒
 conVal = 1.875      # 程序执行一遍的间隔时间    单位: 秒
 
 
-def IF_Img_I(src, mp):
-    # w, h = mp.shape[::2]
-    res = None
+def LoadImage(tag, path) -> Image.Image:
     try:
-        res = cv2.matchTemplate(src,mp,cv2.TM_CCOEFF_NORMED)
-    except Exception:
-        return False, 0.999
-    _, mac_v, _, _ = cv2.minMaxLoc(res)
-    if mac_v < 0.99:
-        return True, mac_v
-    return False, mac_v
+        img = Image.open(f'{path}/{tag}.png')
+    except:
+        return LoadImage(tag, path)
+    return img
 
 
 class Listening:
@@ -249,7 +244,7 @@ class Command:
         time.sleep(4)
 
         self.screenc()
-        img = Image.open(f'{path}/{self.device_name}.png')
+        img = LoadImage(self.device_name, path)
 
         state = self.crop(4, 164, 186, 198, img)
         img.close()
@@ -286,7 +281,7 @@ class Command:
 
         time.sleep(1)
         self.screenc()
-        img = Image.open(f'{path}/{self.device_name}.png')
+        img = LoadImage(self.device_name, path)
 
         res = self.ocr.ocr(img)
         img.close()
@@ -466,7 +461,7 @@ def Start(device_name, device_address, cnocr):
     while True:
         time.sleep(conVal)
         listening.screenc()
-        img = Image.open(f'{path}/{device_name}.png')
+        img = LoadImage(device_name, path)
         dtm = datetime.datetime.now()
         state = listening.LocalHaveEnemy(img)
         # 检测本地红白
@@ -481,7 +476,7 @@ def Start(device_name, device_address, cnocr):
             while True:
                 # 检测舰船状态
                 listening.screenc()
-                img = Image.open(f'{path}/{device_name}.png')
+                img = LoadImage(device_name, path)
                 if listening.IsAtSation(img):
                     is_station = True
                     img.close()
@@ -496,7 +491,7 @@ def Start(device_name, device_address, cnocr):
         if is_station:
             is_waK = False
             listening.screenc()
-            img = Image.open(f'{path}/{device_name}.png')
+            img = LoadImage(device_name, path)
             s, _, des1 = command.GetShipType()
             print(des1)
             des = des1
@@ -509,7 +504,7 @@ def Start(device_name, device_address, cnocr):
             while True:
                 # 检测是否已出站
                 listening.screenc()
-                img = Image.open(f'{path}/{device_name}.png')
+                img = LoadImage(device_name, path)
                 if listening.IsInSpace(img):
                     is_station = False
                     img.close()
@@ -537,7 +532,7 @@ def Start(device_name, device_address, cnocr):
             while True:
                 # 检测是否已进站
                 listening.screenc()
-                img = Image.open(f'{path}/{device_name}.png')
+                img = LoadImage(device_name, path)
                 if listening.IsAtSation(img):
                     is_station = True
                     img.close()
@@ -560,7 +555,7 @@ def Start(device_name, device_address, cnocr):
             while True:
                 # 检测是否已进站
                 listening.screenc()
-                img = Image.open(f'{path}/{device_name}.png')
+                img = LoadImage(device_name, path)
                 if listening.IsAtSation(img):
                     is_station = True
                     img.close()
@@ -585,7 +580,7 @@ def Start(device_name, device_address, cnocr):
             print(device_name, '寻找、进入矿区')
             time.sleep(2)
             listening.screenc()
-            img = Image.open(f'{path}/{device_name}.png')
+            img = LoadImage(device_name, path)
             _, k_index, des33 = command.GoToKAreaUp(img, is_waK)
             img.close()
             is_waK = False
@@ -593,7 +588,7 @@ def Start(device_name, device_address, cnocr):
 
             time.sleep(1)
             listening.screenc()
-            img = Image.open(f'{path}/{device_name}.png')
+            img = LoadImage(device_name, path)
             st = command.GoToKAreaDown(img)
             img.close()
             if not st:
@@ -601,7 +596,7 @@ def Start(device_name, device_address, cnocr):
             while True:
                 # 检测舰船状态
                 listening.screenc()
-                img = Image.open(f'{path}/{device_name}.png')
+                img = LoadImage(device_name, path)
                 _, index, des2 = listening.GetShipState(img)
                 img.close()
                 print(device_name, '检测舰船状态', des2)
