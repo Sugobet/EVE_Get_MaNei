@@ -284,10 +284,9 @@ class Command:
         time.sleep(4)
         os.system(self.adb + f'shell input tap {16 + random.randint(2, 170)} {70 + random.randint(2, 20)}')
 
+        time.sleep(1)
         self.screenc()
         img = Image.open(f'{path}/{self.device_name}.png')
-
-        time.sleep(2)
 
         res = self.ocr.ocr(img)
         img.close()
