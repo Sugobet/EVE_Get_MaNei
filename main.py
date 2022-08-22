@@ -287,6 +287,8 @@ class Command:
         self.screenc()
         img = Image.open(f'{path}/{self.device_name}.png')
 
+        time.sleep(2)
+
         res = self.ocr.ocr(img)
         img.close()
         if res == []:
