@@ -45,6 +45,7 @@ def LoadImage(tag, path) -> Image.Image:
     try:
         img = Image.open(f'{path}/{tag}.png')
     except:
+        time.sleep(3)
         return LoadImage(tag, path)
     return img
 
