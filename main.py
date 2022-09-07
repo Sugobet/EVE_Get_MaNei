@@ -195,6 +195,8 @@ class Listening:
         : 监测本地红白
         '''
         i1 = self.crop(82, 430, 123, 451, img)
+        if not i1:
+            return False
         res = self.ocr.ocr(i1)
         if res == []:
             return False
@@ -205,6 +207,8 @@ class Listening:
             return True
         
         i1 = self.crop(144, 430, 180, 452, img)
+        if not i1:
+            return False
         res = self.ocr.ocr(i1)
         if res == []:
             return False
@@ -248,6 +252,9 @@ class Command:
         img = LoadImage(self.device_name, path)
 
         state = self.crop(4, 164, 186, 198, img)
+        if not state:
+            img.close()
+            return self.GetShipType()
         img.close()
         if not state:
             return False, -1, ''
