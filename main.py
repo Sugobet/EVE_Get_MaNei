@@ -499,6 +499,7 @@ def Start(device_name, device_address, cnocr):
         if is_station:
             is_waK = False
             listening.screenc()
+            time.sleep(1)
             img = LoadImage(device_name, path)
             s, _, des1 = command.GetShipType()
             print(des1)
@@ -529,7 +530,7 @@ def Start(device_name, device_address, cnocr):
             continue
 
         # 仓库满仓
-        if if_Max >= 3:
+        if if_Max >= 1:
             if_Max = 0
             if not listening.IsMax(img):
                 continue
@@ -621,7 +622,7 @@ def Start(device_name, device_address, cnocr):
                 command.ActHighCao(des)
                 if k_index == 1 or k_index == 2:
                     print('正在接近矿石')
-                    time.sleep(20)
+                    time.sleep(8)
                 # 切换总览-舰船
                 print(device_name, '切换总览-舰船')
                 command.ToShipShow()
