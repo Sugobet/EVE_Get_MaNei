@@ -632,7 +632,7 @@ def Start(device_name, device_address, cnocr):
 
 
 if __name__ == '__main__':
+    cnocr = CnOcr(rec_model_name='densenet_lite_136-gru')
     for key, val in devices.items():
-        cnocr = CnOcr(rec_model_name='densenet_lite_136-gru')
         t = threading.Thread(target=Start, args=(key, val, cnocr))
         t.start()
