@@ -145,7 +145,7 @@ class Listening:
             return True, 2, '跃迁至'
         if '即将到达' in text:
             return True, 3, '即将到达'
-        if '停止' in text:
+        if '停' in text or '止' in text:
             return True, 4, '舰船正在停止'
         return False, -1, ''
     
