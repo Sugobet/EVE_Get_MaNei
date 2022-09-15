@@ -74,7 +74,7 @@ class Listening:
         '''
         : 判断是否在太空
         '''
-        status = self.crop(453, 511, 508, 526, img)
+        status = self.crop(443, 503, 518, 532, img)
         if not status:
             return False
 
@@ -324,7 +324,7 @@ class Command:
         time.sleep(timer)
         os.system(self.adb + f'shell input tap {32 + random.randint(2, 96)} {218 + random.randint(2, 20)}')
         time.sleep(timer)
-        os.system(self.adb + f'shell input tap {230 + random.randint(2, 138)} {180 + random.randint(2, 35)}')
+        os.system(self.adb + f'shell input tap {230 + random.randint(2, 138)} {180 + random.randint(2, 20)}')
         time.sleep(timer)
         os.system(self.adb + f'shell input tap {173 + random.randint(2, 28)} 189')
 
