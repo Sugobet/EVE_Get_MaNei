@@ -482,6 +482,11 @@ def Start(device_name, device_address, cnocr):
             continue
         res = cnocr.ocr(img)
         for key in res:
+            if '内没有可' in key['text']:
+                in_K = False
+                break
+            else:
+                in_K = True
             if '满了' in key['text']:
                 if_Max = True
                 break
@@ -496,16 +501,12 @@ def Start(device_name, device_address, cnocr):
                 img.save(f'{path}/{device_name}_FUCK_BLUE_SHIP_{tim}.png')
                 break
             else:
-                is_FS = False
+                if_FS = False
             if '米' in key['text'] or '秒' in key['text']:
                 in_Sp = True
-            else:
-                in_Sp = False
-            if '内没有可' in key['text']:
-                in_K = False
                 break
             else:
-                in_K = True
+                in_Sp = False
 
         # 检测本地红白
         if state:
