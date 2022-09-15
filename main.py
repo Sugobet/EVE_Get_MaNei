@@ -200,7 +200,7 @@ class Listening:
         res = self.ocr.ocr(i1)
         if res == []:
             return False
-        num = (res[0]['text']).replace('o', '0').replace('O', '0').replace('D', '0').replace('U', '0')
+        num = (res[0]['text']).replace('o', '0').replace('O', '0').replace('D', '0').replace('U', '0').replace("口", "0")
         if len(num) >= 2:
             return True
         if len(num) == 1 and num != '0':
@@ -212,7 +212,7 @@ class Listening:
         res = self.ocr.ocr(i1)
         if res == []:
             return False
-        num = (res[0]['text']).replace('o', '0').replace('O', '0').replace('D', '0').replace('U', '0')
+        num = (res[0]['text']).replace('o', '0').replace('O', '0').replace('D', '0').replace('U', '0').replace("口", "0")
         if len(num) >= 2:
             return True
         if len(num) == 1 and num != '0':
@@ -458,7 +458,10 @@ def Start(device_name, device_address, cnocr):
     des = ''
     is_waK = False
     is_station = True
-    if_Max = 0
+    if_Max = False
+    in_Sp = False
+    in_K = False
+    if_FS = False
     listening = Listening(device_name, device_address, cnocr)
     command = Command(device_name, device_address, cnocr)
     # 检测本地红白、跑路
@@ -472,6 +475,37 @@ def Start(device_name, device_address, cnocr):
         img = LoadImage(device_name, path)
         dtm = datetime.datetime.now()
         state = listening.LocalHaveEnemy(img)
+
+        status = listening.crop(268, 8, 956, 536, img)
+        if not status:
+            img.close()
+            continue
+        res = cnocr.ocr(img)
+        for key in res:
+            if '满了' in key['text']:
+                if_Max = True
+                break
+            else:
+                if_Max = False
+            if '拦截' in key['text']:
+                if_FS = True
+                tim = str(datetime.datetime.now()).replace(' ', '---')
+                print(device_name, f'疑似蓝加拦截----------------{tim}')
+                print(device_name, f'疑似蓝加拦截----------------{tim}')
+                print(device_name, f'疑似蓝加拦截----------------{tim}')
+                img.save(f'{path}/{device_name}_FUCK_BLUE_SHIP_{tim}.png')
+                break
+            else:
+                is_FS = False
+            if '米' in key['text'] or '秒' in key['text']:
+                in_Sp = True
+            else:
+                in_Sp = False
+            if '内没有可' in key['text']:
+                in_K = False
+            else:
+                in_K = True
+
         # 检测本地红白
         if state:
             if listening.IsAtSation(img):
@@ -488,7 +522,8 @@ def Start(device_name, device_address, cnocr):
                 if listening.IsAtSation(img):
                     is_station = True
                     img.close()
-                    print(device_name, '进入空间站', dtm)
+                    print(device_name, '进入空间站 等待三分钟', dtm)
+                    time.sleep(180)
                     break
                 img.close()
                 time.sleep(1)
@@ -499,7 +534,6 @@ def Start(device_name, device_address, cnocr):
         if is_station:
             is_waK = False
             listening.screenc()
-            time.sleep(1)
             img = LoadImage(device_name, path)
             s, _, des1 = command.GetShipType()
             print(des1)
@@ -530,10 +564,7 @@ def Start(device_name, device_address, cnocr):
             continue
 
         # 仓库满仓
-        if if_Max >= 1:
-            if_Max = 0
-            if not listening.IsMax(img):
-                continue
+        if if_Max:
             print(device_name, '仓库满仓')
             command.GoHome()
             command.ActLowCao()
@@ -554,10 +585,9 @@ def Start(device_name, device_address, cnocr):
                 time.sleep(1)
             img.close()
             continue
-        if_Max += 1
 
         # 检测蓝加拦截舰船
-        if listening.FindBlueFuckShip(img):
+        if if_FS:
             command.GoHome()
             command.ActLowCao()
 
@@ -577,9 +607,9 @@ def Start(device_name, device_address, cnocr):
             continue
 
         # 在太空 & 挖矿  整合
-        if listening.IsInSpace(img):
+        if in_Sp:
             # 整合     判断矿区消失
-            if is_waK and listening.IsHaveKArea(img):
+            if is_waK and in_K:
                 img.close()
                 continue
             print(device_name, '矿区消失')
@@ -622,7 +652,7 @@ def Start(device_name, device_address, cnocr):
                 command.ActHighCao(des)
                 if k_index == 1 or k_index == 2:
                     print('正在接近矿石')
-                    time.sleep(8)
+                    time.sleep(6)
                 # 切换总览-舰船
                 print(device_name, '切换总览-舰船')
                 command.ToShipShow()
@@ -632,7 +662,7 @@ def Start(device_name, device_address, cnocr):
 
 
 if __name__ == '__main__':
-    cnocr = CnOcr(rec_model_name='densenet_lite_136-gru')
+    cnocr = CnOcr(rec_model_name='densenet_lite_124-fc')
     for key, val in devices.items():
         t = threading.Thread(target=Start, args=(key, val, cnocr))
         t.start()
