@@ -503,6 +503,7 @@ def Start(device_name, device_address, cnocr):
                 in_Sp = False
             if '内没有可' in key['text']:
                 in_K = False
+                break
             else:
                 in_K = True
 
