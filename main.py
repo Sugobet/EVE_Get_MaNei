@@ -482,11 +482,6 @@ def Start(device_name, device_address, cnocr):
             continue
         res = cnocr.ocr(img)
         for key in res:
-            if '内没有可' in key['text']:
-                in_K = False
-                break
-            else:
-                in_K = True
             if '满了' in key['text']:
                 if_Max = True
                 break
@@ -502,6 +497,13 @@ def Start(device_name, device_address, cnocr):
                 break
             else:
                 if_FS = False
+            if '内没有可' in key['text']:
+                in_K = False
+                break
+            else:
+                in_K = True
+
+        for key in res:
             if '米' in key['text'] or '秒' in key['text']:
                 in_Sp = True
                 break
