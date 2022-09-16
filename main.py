@@ -163,7 +163,7 @@ class Listening:
             return False
         for key in res:
             if '拦截' in key['text']:
-                tim = str(datetime.datetime.now()).replace(' ', '---').replace('.', '-')
+                tim = str(datetime.datetime.now()).replace(' ', '---').replace('.', '-').replace(':', '-')
                 print(self.device_name, f'疑似蓝加拦截----------------{tim}')
                 print(self.device_name, f'疑似蓝加拦截----------------{tim}')
                 print(self.device_name, f'疑似蓝加拦截----------------{tim}')
@@ -489,7 +489,7 @@ def Start(device_name, device_address, cnocr):
                 if_Max = False
             if '拦截' in key['text']:
                 if_FS = True
-                tim = str(datetime.datetime.now()).replace(' ', '---').replace('.', '-')
+                tim = str(datetime.datetime.now()).replace(' ', '---').replace('.', '-').replace(':', '-')
                 print(device_name, f'疑似蓝加拦截----------------{tim}')
                 print(device_name, f'疑似蓝加拦截----------------{tim}')
                 print(device_name, f'疑似蓝加拦截----------------{tim}')
@@ -666,7 +666,7 @@ def Start(device_name, device_address, cnocr):
 
 
 if __name__ == '__main__':
-    cnocr = CnOcr(rec_model_name='densenet_lite_136-gru')
+    cnocr = CnOcr(rec_model_name='densenet_lite_124-fc')
     for key, val in devices.items():
         t = threading.Thread(target=Start, args=(key, val, cnocr))
         t.start()
