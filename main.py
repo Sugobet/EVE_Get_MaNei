@@ -163,7 +163,7 @@ class Listening:
             return False
         for key in res:
             if '拦截' in key['text']:
-                tim = str(datetime.datetime.now()).replace(' ', '---')
+                tim = str(datetime.datetime.now()).replace(' ', '---').replace('.', '-')
                 print(self.device_name, f'疑似蓝加拦截----------------{tim}')
                 print(self.device_name, f'疑似蓝加拦截----------------{tim}')
                 print(self.device_name, f'疑似蓝加拦截----------------{tim}')
@@ -489,7 +489,7 @@ def Start(device_name, device_address, cnocr):
                 if_Max = False
             if '拦截' in key['text']:
                 if_FS = True
-                tim = str(datetime.datetime.now()).replace(' ', '---')
+                tim = str(datetime.datetime.now()).replace(' ', '---').replace('.', '-')
                 print(device_name, f'疑似蓝加拦截----------------{tim}')
                 print(device_name, f'疑似蓝加拦截----------------{tim}')
                 print(device_name, f'疑似蓝加拦截----------------{tim}')
